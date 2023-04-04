@@ -1,0 +1,15 @@
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3vw;
+  font-size: 10vw;
+  font-family: "Abhaya Libre", serif;
+}
+h1 img {
+  height: 15vw;
+}/*# sourceMappingURL=style.css.map */

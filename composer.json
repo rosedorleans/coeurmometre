@@ -1,0 +1,23 @@
+{
+    "name": "projets-perso/paris-girafe",
+    "description": "Paris Girafe",
+    "authors": [
+        {
+            "name": "Rose DORLEANS",
+            "email": "rosedorleans1@gmail.com"
+        }
+    ],
+    "config": {
+        "platform-check": false
+    },
+    "autoload": {
+      "psr-4": {
+        "Value\\": "object/value/",
+        "Tools\\": "tools/"
+      },
+      "classmap": [
+          "object/"
+      ]
+    },
+    "optimize-autoloader": true
+}
