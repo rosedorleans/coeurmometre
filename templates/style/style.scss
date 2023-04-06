@@ -4,7 +4,7 @@ body {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 h1 {
@@ -19,22 +19,104 @@ h1 {
         height: 15vw;
     }
 }
+#blockedPage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #80808075;
+    z-index: 1;
+    pointer-events: none;
+
+    .spinner {
+        position: absolute;
+        display: inline-block;
+        align-self: center;
+        top: 50vh;
+        right: 50%;
+        height: 60px;
+        width: 60px;
+        transform: translate(50%, 0);
+
+        div {
+            position: absolute;
+            display: block;
+            height: 60px;
+            width: 60px;
+            box-sizing: border-box;
+            border: 6px solid #fff;
+            border-color: #FFF transparent transparent transparent;
+            border-radius: 50%;
+            animation: spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+
+            &:nth-child(1) {
+                animation-delay: -0.45s;
+            }
+            &:nth-child(2) {
+                animation-delay: -0.3s;
+            }
+            &:nth-child(3) {
+                animation-delay: -0.15s;
+            }
+        }
+
+        @keyframes spinner {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    }
+}
 
 #filters {
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin: 30px 20px;
-    
+
     select {
         width: 100%;
         padding: 10px;
-        background-color: #eee;
+        background-color: #d8176b12;
         border: none;
         border-radius: 10px;
     }
 }
 
 table {
-    
+    width: 95%;
+    margin: 0 auto;
+    font-size: 3vw;
+    text-align: center;
+    border-collapse: collapse;
+    background-color: #d8176b12;
+    border-radius: 30px;
+    box-shadow: 0 5px 5px #d5d5d5;
+
+    thead {
+        color: white;
+        font-weight : bold;
+        background-color: #D8176C;
+        height: 50px;
+
+        tr td {
+            padding: 3vw;
+
+            &:first-of-type {
+                border-radius: 30px 0 0 0;
+            }
+
+            &:last-of-type {
+                border-radius: 0 30px 0 0;
+            }
+        }
+    }
+
+    tbody td {
+        padding: 2vh 0;
+    }
 }

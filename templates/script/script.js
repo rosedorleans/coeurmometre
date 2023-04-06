@@ -4,6 +4,8 @@ let serverURL = window.location.protocol + "//" + window.location.host + window.
 console.log('serverURL:', serverURL)
 
 $(document).ready(async function () {
+    $('#blockedPage').removeClass('hidden')
+
     await $.ajax({
         url : 'http://localhost/ECV/coeurmometre/index.php/value/getDistinctCategory',
         type : 'GET',
@@ -30,9 +32,12 @@ $(document).ready(async function () {
     })
 
     await loadTable()
+    stopSpinner()
 
     $('#category_select, #user_select').off()
-    $('#category_select, #user_select').on('change', function() {
+    $('#category_select, #user_select').on('change', async function() {
+        $('#blockedPage').removeClass('hidden')
+
         let value = $(this).val()
         if(value){
             let category = $('#category_select').val()
@@ -40,9 +45,11 @@ $(document).ready(async function () {
             console.log('category:', category)
             console.log('user:', user)
 
-            loadTable(category, user)
+            await loadTable(category, user)
+            stopSpinner()
         } else {
-            loadTable()
+            await loadTable()
+            stopSpinner()
         }
     })
 })
@@ -59,7 +66,6 @@ function loadTable(category=null, user=null){
             $('table thead').removeClass('hidden')
             $('table tbody').empty()
             if(response.data){
-                console.log('ok')
                 $.each(response.data, function(key, result) {
                     let date = new Date(result.date)
                     date = getRightFormatDate(date, "french", true)
@@ -74,12 +80,17 @@ function loadTable(category=null, user=null){
                     )
                 })
             } else {
-                console.log('ok2')
                 $('table thead').addClass('hidden')
                 $('table tbody').append('<tr><td>Aucun resultat</td></tr>')
             }
         }
     })
+}
+
+function stopSpinner(){
+    setTimeout(function() {
+        $('#blockedPage').addClass('hidden')
+    }, 1000);
 }
 
 function getRightFormatDate(dateObject, purpose, isTime=false) {
@@ -101,6 +112,9 @@ function getRightFormatDate(dateObject, purpose, isTime=false) {
         let minutes = d.getMinutes();
         if(minutes.toString().length == 1){
             minutes = "0" + minutes
+        }
+        if(minutes.toString() == "00"){
+            minutes = ""
         }
 
         time = " " + hours + "h" + minutes
