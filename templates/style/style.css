@@ -2,6 +2,10 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
+.hidden {
+  display: none;
+}
+
 h1 {
   display: flex;
   justify-content: center;
@@ -12,4 +16,18 @@ h1 {
 }
 h1 img {
   height: 15vw;
+}
+
+#filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 30px 20px;
+}
+#filters select {
+  width: 100%;
+  padding: 10px;
+  background-color: #eee;
+  border: none;
+  border-radius: 10px;
 }/*# sourceMappingURL=style.css.map */

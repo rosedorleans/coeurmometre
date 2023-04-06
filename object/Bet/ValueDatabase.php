@@ -9,17 +9,61 @@ Use PDO;
 
 class ValueDatabase extends Database{
 
-    /**
-     * @return Value[] $result
-     */
-    public function getAllValue(){
-        $query = $this->PDO->prepare("SELECT * FROM `value`");
-        $query->execute();
+	/**
+	* @param int|null $category
+	* @param int|null $user
+	* @return Value[]
+	*/
+	public function getAllValue($category, $user){
+		$query = "SELECT * FROM `value`";
+		
+		if($category !== 'null' || $user !== 'null') {
+			$req_category = "";
+			$req_user = "";
+
+			$query .= " WHERE ";
+
+			if ($category !== 'null') {
+				$req_category = "`category` = '$category'";
+			}
+			if ($user !== 'null') {
+				$req_user .= "`user` = '$user'";
+			}
+			
+
+			$query .=
+				($req_category ? $req_category : "").
+				(($req_category && $req_user) ? " AND " : "").
+				($req_user ? $req_user : "");
+
+
+		}
+		// var_dump($query);
+		$query = $this->PDO->prepare($query);
+
+		if($category !== 'null' || $user !== 'null'){
+			$query->bindParam(':category', $category);
+			$query->bindParam(':user', $user);
+		}
+
+		$query->execute();
+		// var_dump($query->errorInfo());
+		// var_dump($query->debugDumpParams());
         return $query->fetchAll(PDO::FETCH_CLASS, Value::class);
-    }
+	}
+
+    // /**
+    //  * @return Value[] $result
+    //  */
+    // public function getAllValue(){
+    //     $query = $this->PDO->prepare("SELECT * FROM `value`");
+    //     $query->execute();
+    //     return $query->fetchAll(PDO::FETCH_CLASS, Value::class);
+    // }
+
     /**
      * @param int $id
-     * @return Value $O_BDC
+     * @return Value $O_value
      */
     public function getValue($id){
         $query = $this->PDO->prepare("SELECT * FROM `value`
@@ -28,13 +72,26 @@ class ValueDatabase extends Database{
         $query->execute();
         return $query->fetchObject(Value::class);
     }
-
-	// public function getDistinctCategory(){
-	// 	$query = $this->PDO->prepare("SELECT DISTINCT `category`, `user`
-	// 								  FROM `value`");
-	// 	$query->execute();
-	// 	return $query->fetchAll(Value::class);
-	// }
+    /**
+     * @return Value $O_value
+     */
+	public function getDistinctCategory(){
+		$query = $this->PDO->prepare("SELECT DISTINCT `category`
+									  FROM `value`");
+		$query->execute();
+		return $query->fetchAll(PDO::FETCH_CLASS, Value::class);
+	}
+    /**
+     * @return Value $O_value
+     */
+	public function getDistinctUser(){
+		$query = $this->PDO->prepare("SELECT DISTINCT `user`
+									  FROM `value`");
+		$query->execute();
+		// var_dump($query->errorInfo());
+		// var_dump($query->debugDumpParams());
+        return $query->fetchAll(PDO::FETCH_CLASS, Value::class);
+	}
 
     /**
 	* @param Value $O_Value
