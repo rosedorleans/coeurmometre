@@ -1,5 +1,6 @@
 
 body {
+    margin: 0;
     font-family: 'Poppins', sans-serif;
 }
 
@@ -12,6 +13,7 @@ h1 {
     justify-content: center;
     align-items: center;
     gap: 3vw;
+    margin: 3vh 0 7vh;
     font-size: 10vw;
     font-family: 'Abhaya Libre', serif;
 
@@ -19,6 +21,14 @@ h1 {
         height: 15vw;
     }
 }
+
+h2 {
+    position: absolute;
+    top: 65px;
+    right: 30px;
+    font-size: 13px;
+}
+
 #blockedPage {
     position: fixed;
     top: 0;
@@ -118,5 +128,13 @@ table {
 
     tbody td {
         padding: 2vh 0;
+
+        &:last-of-type {
+            input {
+                width: 15vw;
+                border: 1px solid #313131;
+                border-radius: 5px;
+            }
+        }
     }
 }

@@ -52,6 +52,8 @@ $(document).ready(async function () {
             stopSpinner()
         }
     })
+
+    
 })
 
 function loadTable(category=null, user=null){
@@ -75,7 +77,7 @@ function loadTable(category=null, user=null){
                             '<td>'+result.value+'</td>'+
                             '<td>'+result.category+'</td>'+
                             '<td>'+date+'</td>'+
-                            '<td>'+result.user+'</td>'+
+                            '<td><input type="text" class="updateValue_js" value="'+result.user+'" data-id="'+result.id+'"></td>'+
                         '</tr>'
                     )
                 })
@@ -83,6 +85,27 @@ function loadTable(category=null, user=null){
                 $('table thead').addClass('hidden')
                 $('table tbody').append('<tr><td>Aucun resultat</td></tr>')
             }
+
+            $('.updateValue_js').off("change")
+            $('.updateValue_js').on("change", function(){
+                console.log($(this).data('id'))
+                let T_data = {
+                    "id": $(this).data('id'),
+                    "user": $(this).val(),
+                }
+
+                console.log('T_data:', T_data)
+
+                $.ajax({
+                    url : 'http://localhost/ECV/coeurmometre/index.php/value/',
+                    type : 'PUT',
+                    data: T_data,
+                    success : function(response){
+                        console.log(response.data)
+                        
+                    }
+                })
+            })
         }
     })
 }
