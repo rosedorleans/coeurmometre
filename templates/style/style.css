@@ -16,8 +16,18 @@ h1 {
   font-size: 10vw;
   font-family: "Abhaya Libre", serif;
 }
+@media screen and (min-width: 700px) {
+  h1 {
+    font-size: 45px;
+  }
+}
 h1 img {
   height: 15vw;
+}
+@media screen and (min-width: 700px) {
+  h1 img {
+    height: 75px;
+  }
 }
 
 h2 {
@@ -25,6 +35,20 @@ h2 {
   top: 65px;
   right: 30px;
   font-size: 13px;
+}
+@media screen and (min-width: 550px) {
+  h2 {
+    top: 15vw;
+    right: 7vw;
+  }
+}
+@media screen and (min-width: 700px) {
+  h2 {
+    top: 80px;
+    right: 50%;
+    font-size: 15px;
+    transform: translate(50%, 0);
+  }
 }
 
 #blockedPage {
@@ -82,12 +106,29 @@ h2 {
   gap: 10px;
   margin: 30px 20px;
 }
+@media screen and (min-width: 550px) {
+  #filters {
+    align-items: center;
+  }
+}
 #filters select {
   width: 100%;
   padding: 10px;
   background-color: rgba(216, 23, 107, 0.0705882353);
   border: none;
   border-radius: 10px;
+}
+@media screen and (min-width: 550px) {
+  #filters select {
+    width: 60%;
+    font-size: 2.5vw;
+  }
+}
+@media screen and (min-width: 700px) {
+  #filters select {
+    width: 450px;
+    font-size: 17px;
+  }
 }
 
 table {
@@ -99,6 +140,17 @@ table {
   background-color: rgba(216, 23, 107, 0.0705882353);
   border-radius: 30px;
   box-shadow: 0 5px 5px #d5d5d5;
+}
+@media screen and (min-width: 550px) {
+  table {
+    font-size: 2.5vw;
+  }
+}
+@media screen and (min-width: 700px) {
+  table {
+    width: 650px;
+    font-size: 17px;
+  }
 }
 table thead {
   color: white;
@@ -122,4 +174,15 @@ table tbody td:last-of-type input {
   width: 15vw;
   border: 1px solid #313131;
   border-radius: 5px;
+}
+@media screen and (min-width: 700px) {
+  table tbody td:last-of-type input {
+    width: 115px;
+    font-size: 17px;
+  }
+}
+@media screen and (min-width: 700px) {
+  table td {
+    padding: 10px !important;
+  }
 }/*# sourceMappingURL=style.css.map */

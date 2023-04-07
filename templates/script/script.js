@@ -6,31 +6,7 @@ console.log('serverURL:', serverURL)
 $(document).ready(async function () {
     $('#blockedPage').removeClass('hidden')
 
-    await $.ajax({
-        url : 'http://localhost/ECV/coeurmometre/index.php/value/getDistinctCategory',
-        type : 'GET',
-        success : function(response){
-            console.log(response.data)
-            $.each(response.data, function(key, category) {
-                $('#category_select').append(
-                    '<option class="category-option" value="'+category.category+'">'+category.category+'</option>'
-                )
-            })
-        }
-    })
-    await $.ajax({
-        url : 'http://localhost/ECV/coeurmometre/index.php/value/getDistinctUser',
-        type : 'GET',
-        success : function(response){
-            console.log(response.data)
-            $.each(response.data, function(key, user) {
-                $('#user_select').append(
-                    '<option class="user-option" value="'+user.user+'">'+user.user+'</option>'
-                )
-            })
-        }
-    })
-
+    await loadFilters()
     await loadTable()
     stopSpinner()
 
@@ -56,28 +32,37 @@ $(document).ready(async function () {
     
 })
 
-function loadTable(category=null, user=null){
+async function loadTable(category=null, user=null){
     let url = 'http://localhost/ECV/coeurmometre/index.php/value/getAllValue?category='+category+'&user='+user
     console.log('url:', url)
     
     $.ajax({
         url : url,
         type : 'GET',
-        success : function(response){
+        success : async function(response){
             console.log('response.data:', response.data)
             $('table thead').removeClass('hidden')
             $('table tbody').empty()
             if(response.data){
-                $.each(response.data, function(key, result) {
+                let T_result_sorted = response.data.sort(function(a,b){
+                    return new Date(b.date) - new Date(a.date);
+                });
+
+                $.each(T_result_sorted, function(key, result) {
                     let date = new Date(result.date)
                     date = getRightFormatDate(date, "french", true)
+
+                    let userName = ""
+                    if(result.user){
+                        userName = result.user
+                    }
 
                     $('table tbody').append(
                         '<tr>'+
                             '<td>'+result.value+'</td>'+
                             '<td>'+result.category+'</td>'+
                             '<td>'+date+'</td>'+
-                            '<td><input type="text" class="updateValue_js" value="'+result.user+'" data-id="'+result.id+'"></td>'+
+                            '<td><input type="text" class="updateValue_js" value="'+userName+'" data-id="'+result.id+'"></td>'+
                         '</tr>'
                     )
                 })
@@ -87,7 +72,8 @@ function loadTable(category=null, user=null){
             }
 
             $('.updateValue_js').off("change")
-            $('.updateValue_js').on("change", function(){
+            $('.updateValue_js').on("change", async function(){
+                $('#blockedPage').removeClass('hidden')
                 console.log($(this).data('id'))
                 let T_data = {
                     "id": $(this).data('id'),
@@ -100,11 +86,51 @@ function loadTable(category=null, user=null){
                     url : 'http://localhost/ECV/coeurmometre/index.php/value/',
                     type : 'PUT',
                     data: T_data,
-                    success : function(response){
+                    success : async function(response){
                         console.log(response.data)
-                        
+
+                        await loadFilters()
+                        await loadTable()
+                        stopSpinner()
                     }
                 })
+            })
+        }
+    })
+}
+
+function loadFilters(){
+    $('#category_select, #user_select').empty()
+
+    $.ajax({
+        url : 'http://localhost/ECV/coeurmometre/index.php/value/getDistinctCategory',
+        type : 'GET',
+        success : function(response){
+            console.log(response.data)
+            $('#category_select').append(
+                '<option selected="true" value="null">Toutes les catégories</option>')
+
+            $.each(response.data, function(key, category) {
+                $('#category_select').append(
+                    '<option class="category-option" value="'+category.category+'">'+category.category+'</option>'
+                )
+            })
+        }
+    })
+    $.ajax({
+        url : 'http://localhost/ECV/coeurmometre/index.php/value/getDistinctUser',
+        type : 'GET',
+        success : function(response){
+            console.log(response.data)
+            $('#user_select').append(
+                '<option selected="true" value="null">Tous les utilisateurs</option>')
+
+            $.each(response.data, function(key, user) {
+                if(user.user){
+                    $('#user_select').append(
+                        '<option class="user-option" value="'+user.user+'">'+user.user+'</option>'
+                    )
+                }
             })
         }
     })

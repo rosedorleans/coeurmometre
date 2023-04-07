@@ -5,6 +5,8 @@ Use Value\Value;
 use Value\ValueDatabase;
 Use Tools\MainController;
 Use Tools\Response;
+use DateTime;
+use DateInterval;
 
 class ValueController extends MainController{
     private $route = ["getAllValue", "getDistinctCategory", "getDistinctUser"];
@@ -172,10 +174,18 @@ class ValueController extends MainController{
      */
 
      private function create($T_data){
+        var_dump($T_data);
+
         $O_response = new Response();
         $O_value = new Value();
         $O_valueDatabase = new ValueDatabase();
         $O_value->hydrate($T_data);
+        $date = new DateTime();
+        $date->add(new DateInterval("PT2H"));
+        $O_value->setDate($date->format('Y-m-d H:i:s'));
+
+        var_dump($O_value);
+
         $O_value = $O_valueDatabase->createValue($O_value);
         if($O_value)
             $data=[
@@ -201,7 +211,12 @@ class ValueController extends MainController{
         $O_response = new Response();
         $O_value = new Value();
         $O_valueDatabase = new ValueDatabase();
+
         $O_value->hydrate($T_data);
+        if($T_data["user"] == ""){
+            $O_value->setUser(NULL);
+        }
+        
         $O_value = $O_valueDatabase->updateValue($O_value);
         if($O_value)
             $data=[

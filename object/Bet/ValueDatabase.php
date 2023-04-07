@@ -133,7 +133,10 @@ class ValueDatabase extends Database{
 		}
 
 		$query = $this->PDO->prepare("INSERT INTO `value`(".implode(",",$T_row).") VALUES (".implode(",",$T_insert).")");
+		var_dump($query);
 		$query->execute($T_value);
+		var_dump($query->errorInfo());
+		var_dump($query->debugDumpParams());
 		return $this->getValue($O_value->getId());
     }
 
@@ -160,6 +163,9 @@ class ValueDatabase extends Database{
         if ($O_value->getUser()) {
             $T_update[]="`user` =:user";
 			$T_value[':user'] = $O_value->getUser();
+		} else {
+			$T_update[]="`user`=:user";
+			$T_value[':user']= NULL;
 		}
 
         $query = $this->PDO->prepare("UPDATE `value` SET ".implode(",",$T_update)." WHERE `id` = :id");
